@@ -106,7 +106,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setIsPlaying((prev) => !prev)}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 px-6 py-3 text-center text-sm font-semibold transition-colors hover:bg-white/10"
+              className="rounded-full bg-gold px-6 py-3 text-center text-sm font-semibold text-gold-foreground transition-transform hover:-translate-y-0.5"
             >
               {isPlaying ? (
                 <>
