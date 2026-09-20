@@ -70,7 +70,7 @@ export function ShirtSection({ content }: { content: SiteContent }) {
           </div>
 
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-gold">Loja do peregrino</p>
+    
             <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl">
               Camiseta oficial da peregrinação
             </h2>
