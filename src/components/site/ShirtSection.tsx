@@ -76,109 +76,12 @@ export function ShirtSection({ content }: { content: SiteContent }) {
             </h2>
             <p className="mt-4 text-muted-foreground">{content["shirt_subtitle"]}</p>
 
-            <div className="mt-6 flex flex-wrap items-end gap-3">
-              <span className="text-muted-foreground line-through">R$ {oldPrice},00</span>
-              <span className="font-display text-4xl text-primary">R$ {price},00</span>
-              <span className="rounded-full bg-crimson px-3 py-1 text-xs font-semibold text-primary-foreground">
-                Promoção
-              </span>
-            </div>
-
+           
             <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
               <li>• Todos os tamanhos disponíveis (PP ao XG)</li>
               <li>• Estampa frente e verso com o mapa do caminho</li>
               <li>• Retorno pelo WhatsApp em até 48 horas</li>
             </ul>
-
-            {!open ? (
-              <button
-                onClick={() => setOpen(true)}
-                className="mt-8 w-full rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5 sm:w-auto"
-              >
-                Comprar agora
-              </button>
-            ) : done ? (
-              <div className="mt-8 rounded-2xl border border-border bg-card p-6">
-                <h3 className="text-xl">Pedido recebido!</h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Uma resposta será enviada ao seu WhatsApp nas próximas 48 horas com os próximos
-                  passos da compra.
-                </p>
-              </div>
-            ) : (
-              <form
-                onSubmit={submit}
-                className="mt-8 space-y-4 rounded-2xl border border-border bg-card p-4 sm:p-6"
-              >
-                <div>
-                  <label className="text-sm font-medium" htmlFor="nome">
-                    Nome completo
-                  </label>
-                  <input
-                    id="nome"
-                    value={form.full_name}
-                    maxLength={120}
-                    onChange={(e) => setForm({ ...form, full_name: e.target.value })}
-                    className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
-                    required
-                  />
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="text-sm font-medium" htmlFor="tamanho">
-                      Tamanho
-                    </label>
-                    <select
-                      id="tamanho"
-                      value={form.size}
-                      onChange={(e) => setForm({ ...form, size: e.target.value })}
-                      className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
-                    >
-                      {sizes.map((size) => (
-                        <option key={size} value={size}>
-                          {size}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium" htmlFor="qtd">
-                      Quantidade
-                    </label>
-                    <input
-                      id="qtd"
-                      type="number"
-                      min={1}
-                      max={20}
-                      value={form.quantity}
-                      onChange={(e) => setForm({ ...form, quantity: Number(e.target.value) })}
-                      className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium" htmlFor="zap">
-                    WhatsApp
-                  </label>
-                  <input
-                    id="zap"
-                    value={form.whatsapp}
-                    maxLength={20}
-                    placeholder="(43) 99999-0000"
-                    onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
-                    className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={sending}
-                  className="w-full rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground disabled:opacity-60"
-                >
-                  {sending ? "Enviando..." : "Enviar pedido"}
-                </button>
-              </form>
-            )}
           </div>
         </div>
       </div>
