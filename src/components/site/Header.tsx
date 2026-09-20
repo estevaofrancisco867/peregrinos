@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Volume2, VolumeX } from "lucide-react";
 import trilha from "@/assets/trilha.png.asset.json";
@@ -17,28 +17,20 @@ const links = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const toggleMusic = () => {
-    if (!audioRef.current) return;
-
-    if (isPlaying) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      audioRef.current.play();
-      setIsPlaying(true);
-    }
-  };
 
   return (
     <header className="hero-surface relative overflow-hidden">
-      {/* Elemento de áudio invisível para reprodução */}
-      <audio
-        ref={audioRef}
-        src="https://www.youtube.com/watch?v=oy_0AqScJME"
-        onEnded={() => setIsPlaying(false)}
-      />
+      {/* Iframe invisível do YouTube que só carrega/toca quando isPlaying for true */}
+      {isPlaying && (
+        <iframe
+          width="0"
+          height="0"
+          src="https://www.youtube.com/embed/oy_0AqScJME?autoplay=1"
+          title="Música de fundo"
+          allow="autoplay"
+          className="hidden"
+        />
+      )}
 
       <nav className="relative z-10 mx-auto max-w-6xl px-5 py-4 sm:py-5">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 lg:flex lg:justify-between">
@@ -113,7 +105,7 @@ export function Header() {
             </a>
             <button
               type="button"
-              onClick={toggleMusic}
+              onClick={() => setIsPlaying((prev) => !prev)}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 px-6 py-3 text-center text-sm font-semibold transition-colors hover:bg-white/10"
             >
               {isPlaying ? (
