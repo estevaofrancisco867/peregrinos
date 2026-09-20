@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Volume2, VolumeX } from "lucide-react";
 import trilha from "@/assets/trilha.png.asset.json";
 
 const links = [
@@ -16,9 +16,30 @@ const links = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play();
+      setIsPlaying(true);
+    }
+  };
 
   return (
     <header className="hero-surface relative overflow-hidden">
+      {/* Elemento de áudio invisível para reprodução */}
+      <audio
+        ref={audioRef}
+        src="https://www.youtube.com/watch?v=oy_0AqScJME"
+        onEnded={() => setIsPlaying(false)}
+      />
+
       <nav className="relative z-10 mx-auto max-w-6xl px-5 py-4 sm:py-5">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 lg:flex lg:justify-between">
           <Link
@@ -90,6 +111,23 @@ export function Header() {
             >
               Camiseta oficial
             </a>
+            <button
+              type="button"
+              onClick={toggleMusic}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 px-6 py-3 text-center text-sm font-semibold transition-colors hover:bg-white/10"
+            >
+              {isPlaying ? (
+                <>
+                  <VolumeX className="h-4 w-4" />
+                  Pausar música
+                </>
+              ) : (
+                <>
+                  <Volume2 className="h-4 w-4" />
+                  Tocar uma música
+                </>
+              )}
+            </button>
           </div>
         </div>
         <div className="justify-self-center">
