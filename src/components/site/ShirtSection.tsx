@@ -80,7 +80,7 @@ export function ShirtSection({ content }: { content: SiteContent }) {
             <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
               <li>• Todos os tamanhos disponíveis (PP ao XG)</li>
               <li>• Estampa frente e verso com o mapa do caminho</li>
-              <li>• Retorno pelo WhatsApp em até 48 horas</li>
+              
             </ul>
           </div>
         </div>
