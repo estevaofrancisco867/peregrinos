@@ -20,7 +20,7 @@ export function Header() {
 
   return (
     <header className="hero-surface relative overflow-hidden">
-      {/* Iframe invisível do YouTube que só carrega/toca quando isPlaying for true */}
+      {/* Iframe invisível do YouTube que carrega/toca quando isPlaying for true */}
       {isPlaying && (
         <iframe
           width="0"
@@ -106,7 +106,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setIsPlaying((prev) => !prev)}
-              className="rounded-full bg-gold px-6 py-3 text-center text-sm font-semibold text-gold-foreground transition-transform hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3 text-center text-sm font-semibold text-gold-foreground transition-transform hover:-translate-y-0.5"
             >
               {isPlaying ? (
                 <>
