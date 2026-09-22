@@ -12,7 +12,7 @@ export const Route = createFileRoute("/auth")({
       {
         name: "description",
         content:
-          "Acesso restrito da coordenação dos Peregrinos da Fé para atualizar o conteúdo do site e acompanhar os pedidos de camiseta.",
+          "Acesso restrito da coordenação dos Peregrinos da Fé para atualizar o conteúdo do site.",
       },
       { property: "og:title", content: "Área da coordenação | Peregrinos da Fé" },
       {
