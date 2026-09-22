@@ -211,7 +211,7 @@ function OrdersPanel() {
     await supabase.from("shirt_orders").delete().eq("id", id);
     queryClient.invalidateQueries({ queryKey: ["shirt_orders"] });
   }
-
+}
 
 function SiteContentPanel() {
   const queryClient = useQueryClient();
