@@ -124,7 +124,7 @@ export function Header() {
         </div>
         <div className="justify-self-center">
           <img
-            src={trilha.url}
+            src= "src/assets/trilha.png"
             alt="Imagem de Jesus ressuscitado com a cruz, símbolo do Caminho Jesus das Santas Chagas"
             className="w-full max-w-[16rem] rounded-3xl border border-white/20 object-cover shadow-2xl sm:max-w-sm"
           />
