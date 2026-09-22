@@ -190,7 +190,6 @@ const CONTENT_LABELS: Record<string, string> = {
   shirt_subtitle: "Descrição da camiseta",
   hero_title: "Título principal do site",
   hero_subtitle: "Frase de apoio do título principal",
-  whatsapp: "WhatsApp de contato",
 };
 
 function contentLabel(key: string) {
