@@ -221,16 +221,7 @@ function OrdersPanel() {
 
       <div className="mt-5 overflow-x-auto">
         <table className="w-full min-w-[640px] text-left text-sm">
-          <thead className="text-muted-foreground">
-            <tr>
-              <th className="py-2">Nome</th>
-              <th className="py-2">Tamanho</th>
-              <th className="py-2">Qtd.</th>
-              <th className="py-2">WhatsApp</th>
-              <th className="py-2">Situação</th>
-              <th className="py-2" />
-            </tr>
-          </thead>
+         
           <tbody className="divide-y divide-border">
             {orders.map((order) => (
               <tr key={order.id}>
