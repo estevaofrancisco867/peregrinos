@@ -213,67 +213,7 @@ function OrdersPanel() {
   }
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-6">
-      <h2 className="text-xl">Pedidos de camiseta</h2>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {orders.length} pedido(s) recebido(s) pelo site.
-      </p>
-
-      <div className="mt-5 overflow-x-auto">
-        <table className="w-full min-w-[640px] text-left text-sm">
-         
-          <tbody className="divide-y divide-border">
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td className="py-2">{order.full_name}</td>
-                <td className="py-2">{order.size}</td>
-                <td className="py-2">{order.quantity}</td>
-                <td className="py-2">
-                  <a
-                    href={`https://wa.me/55${order.whatsapp.replace(/\D/g, "")}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-primary underline"
-                  >
-                    {order.whatsapp}
-                  </a>
-                </td>
-                <td className="py-2">
-                  <select
-                    value={order.status}
-                    onChange={(e) => updateStatus(order.id, e.target.value)}
-                    aria-label="Situação do pedido"
-                    className="rounded-lg border border-border bg-background px-2 py-1"
-                  >
-                    {STATUSES.map((status) => (
-                      <option key={status} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td className="py-2 text-right">
-                  <button
-                    type="button"
-                    onClick={() => remove(order.id)}
-                    className="text-destructive underline"
-                  >
-                    Excluir
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {orders.length === 0 ? (
-              <tr>
-                <td className="py-3 text-muted-foreground" colSpan={6}>
-                  Nenhum pedido até agora.
-                </td>
-              </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
-    </section>
+    
   );
 }
 
