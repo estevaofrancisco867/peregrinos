@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Volume2, VolumeX } from "lucide-react";
-import trilha from "@/assets/trilha.png.asset.json";
+import trilha from "./assets/trilha.png";
+
 
 const links = [
   { href: "/#quem-somos", label: "Quem somos" },
@@ -124,7 +125,7 @@ export function Header() {
         </div>
         <div className="justify-self-center">
           <img
-            src= "src/assets/trilha.png"
+            src= {trilha}
             alt="Imagem de Jesus ressuscitado com a cruz, símbolo do Caminho Jesus das Santas Chagas"
             className="w-full max-w-[16rem] rounded-3xl border border-white/20 object-cover shadow-2xl sm:max-w-sm"
           />
