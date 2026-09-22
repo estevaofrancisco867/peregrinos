@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, Volume2, VolumeX } from "lucide-react";
-import trilha from '../assets/trilha.png';
-import asset from '../data/assets.json';
 
-
+import trilha from "../../assets/trilha.png";
+import asset from "../../data/assets.json";
 
 const links = [
   { href: "/#quem-somos", label: "Quem somos" },
@@ -23,7 +22,6 @@ export function Header() {
 
   return (
     <header className="hero-surface relative overflow-hidden">
-      {/* Iframe invisível do YouTube que carrega/toca quando isPlaying for true */}
       {isPlaying && (
         <iframe
           width="0"
@@ -51,13 +49,20 @@ export function Header() {
             aria-expanded={open}
             className="shrink-0 rounded-full border border-white/40 p-2 lg:hidden"
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {open ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </button>
 
           <ul className="hidden items-center gap-x-5 gap-y-2 text-sm lg:flex lg:flex-wrap">
             {links.map((link) => (
               <li key={link.href}>
-                <a href={link.href} className="opacity-85 transition-opacity hover:opacity-100">
+                <a
+                  href={link.href}
+                  className="opacity-85 transition-opacity hover:opacity-100"
+                >
                   {link.label}
                 </a>
               </li>
@@ -87,12 +92,19 @@ export function Header() {
           <p className="text-xs uppercase tracking-[0.3em] text-gold sm:text-sm sm:tracking-[0.35em]">
             Ibiporã · Paraná
           </p>
+
           <h1 className="mt-4 text-3xl leading-tight sm:text-4xl md:text-6xl">
-            4º Caminho <span className="text-gold">Jesus das Santas Chagas</span>
+            4º Caminho{" "}
+            <span className="text-gold">
+              Jesus das Santas Chagas
+            </span>
           </h1>
+
           <p className="mt-4 max-w-xl text-base opacity-90 md:mt-5 md:text-lg">
-            Uma peregrinação católica de oração, serviço e acolhida. Por suas Chagas somos curados.
+            Uma peregrinação católica de oração, serviço e acolhida. Por suas
+            Chagas somos curados.
           </p>
+
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <a
               href="/#inscricao"
@@ -100,12 +112,14 @@ export function Header() {
             >
               Quero peregrinar
             </a>
+
             <a
               href="/#camiseta"
               className="rounded-full border border-white/40 px-6 py-3 text-center text-sm font-semibold transition-colors hover:bg-white/10"
             >
               Camiseta oficial
             </a>
+
             <button
               type="button"
               onClick={() => setIsPlaying((prev) => !prev)}
@@ -125,10 +139,11 @@ export function Header() {
             </button>
           </div>
         </div>
+
         <div className="justify-self-center">
           <img
-            src={trilha} alt={asset.original_filename} 
-            alt="Imagem de Jesus ressuscitado com a cruz, símbolo do Caminho Jesus das Santas Chagas"
+            src={trilha}
+            alt={asset.original_filename}
             className="w-full max-w-[16rem] rounded-3xl border border-white/20 object-cover shadow-2xl sm:max-w-sm"
           />
         </div>
