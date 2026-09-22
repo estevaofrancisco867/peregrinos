@@ -212,11 +212,6 @@ function OrdersPanel() {
     queryClient.invalidateQueries({ queryKey: ["shirt_orders"] });
   }
 
-  return (
-    
-  );
-}
-
 
 function SiteContentPanel() {
   const queryClient = useQueryClient();
@@ -237,7 +232,7 @@ function SiteContentPanel() {
     <section className="rounded-2xl border border-border bg-card p-6">
       <h2 className="text-xl">Textos do site</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Ajuste títulos, textos, preços e links exibidos nas páginas.
+        Ajuste títulos, textos e links exibidos nas páginas.
       </p>
       {saved ? <p className="mt-2 text-sm text-primary">Alteração salva.</p> : null}
 
