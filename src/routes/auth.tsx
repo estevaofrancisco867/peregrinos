@@ -56,7 +56,7 @@ function AuthPage() {
       <main className="mx-auto w-full max-w-md px-5 py-16">
         <h1 className="text-3xl">Área da coordenação</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Acesso restrito para atualizar o site e ver os pedidos de camiseta.
+          Acesso restrito para atualizar o site.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
