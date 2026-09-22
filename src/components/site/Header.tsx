@@ -25,7 +25,7 @@ export function Header() {
         <iframe
           width="0"
           height="0"
-          src="https://www.youtube.com/embed/oy_0AqScJME?autoplay=1"
+          src="https://www.youtube.com/watch?v=DSMGO7AT2sk"
           title="Música de fundo"
           allow="autoplay"
           className="hidden"
