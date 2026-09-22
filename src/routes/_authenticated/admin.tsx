@@ -181,7 +181,6 @@ function AdminContent() {
   );
 }
 
-const STATUSES = ["novo", "em contato", "pago", "entregue", "cancelado"];
 
 const CONTENT_LABELS: Record<string, string> = {
   about_title: 'Título da seção "Quem somos"',
