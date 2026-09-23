@@ -1,4 +1,4 @@
-
+```tsx
 import camisetaFrente from "../../assets/camiseta-frente.png";
 import camisetaVerso from "../../assets/camiseta-verso.png";
 
@@ -12,95 +12,45 @@ export function ShirtSection({ content }: { content: SiteContent }) {
         <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-12">
 
           {/* IMAGENS */}
-          <div className="grid grid-cols-2 gap-4 sm:gap-5">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
 
             {/* FRENTE */}
-            <figure className="group text-center">
+            <div className="text-center">
 
-              <div
-                className="
-                  flex h-56 w-full items-center justify-center
-                  overflow-hidden rounded-2xl
-                  border border-border
-                  bg-card
-                  p-4
-                  shadow-sm
-                  transition-all duration-300
-                  group-hover:-translate-y-1
-                  group-hover:shadow-lg
-                  sm:h-72
-                "
-              >
+              <div className="flex h-56 items-center justify-center sm:h-72">
                 <img
                   src={camisetaFrente}
-                  alt="Frente da camiseta oficial da peregrinação"
-                  className="
-                    h-full w-full
-                    object-contain
-                    transition-transform duration-300
-                    group-hover:scale-105
-                  "
+                  alt="Frente"
+                  className="h-full w-full object-contain"
                 />
               </div>
 
-              <figcaption
-                className="
-                  mt-4
-                  text-sm font-semibold
-                  uppercase tracking-[0.25em]
-                  text-foreground
-                "
-              >
+              <p className="mt-3 text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                 Frente
-              </figcaption>
+              </p>
 
-            </figure>
+            </div>
 
             {/* VERSO */}
-            <figure className="group text-center">
+            <div className="text-center">
 
-              <div
-                className="
-                  flex h-56 w-full items-center justify-center
-                  overflow-hidden rounded-2xl
-                  border border-border
-                  bg-card
-                  p-4
-                  shadow-sm
-                  transition-all duration-300
-                  group-hover:-translate-y-1
-                  group-hover:shadow-lg
-                  sm:h-72
-                "
-              >
+              <div className="flex h-56 items-center justify-center sm:h-72">
                 <img
                   src={camisetaVerso}
-                  alt="Verso da camiseta oficial da peregrinação"
-                  className="
-                    h-full w-full
-                    object-contain
-                    transition-transform duration-300
-                    group-hover:scale-105
-                  "
+                  alt="Verso"
+                  className="h-full w-full object-contain"
                 />
               </div>
 
-              <figcaption
-                className="
-                  mt-4
-                  text-sm font-semibold
-                  uppercase tracking-[0.25em]
-                  text-foreground
-                "
-              >
+              <p className="mt-3 text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                 Verso
-              </figcaption>
+              </p>
 
-            </figure>
+            </div>
 
           </div>
 
-          {/* INFORMAÇÕES */}
+          {/* TEXTO */}
           <div>
 
             <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl">
