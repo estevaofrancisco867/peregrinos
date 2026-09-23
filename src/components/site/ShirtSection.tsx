@@ -1,4 +1,3 @@
-import { useState } from "react";
 import camisetaFrente from "../../assets/camiseta-frente.png";
 import camisetaVerso from "../../assets/camiseta-verso.png";
 
@@ -12,9 +11,6 @@ export function ShirtSection({
 }: {
   content: SiteContent;
 }) {
-  const price = content["shirt_price"] ?? "35";
-  const oldPrice = content["shirt_old_price"] ?? "40";
-
   return (
     <section id="camiseta" className="section-pad bg-muted">
       <div className="mx-auto max-w-6xl px-5">
@@ -75,24 +71,6 @@ export function ShirtSection({
               <li>• Estampa frente e verso com o mapa do caminho</li>
               <li>• Tecido leve e confortável</li>
             </ul>
-
-            {/* PREÇO */}
-            <div className="mt-6">
-              <span className="text-sm text-muted-foreground line-through">
-                R$ {oldPrice}
-              </span>
-
-              <div className="text-3xl font-bold">
-                R$ {price}
-              </div>
-            </div>
-
-            {/* AVISO DE VENDAS ENCERRADAS */}
-            <div className="mt-6 rounded-xl border border-border bg-card p-4 text-center">
-              <p className="text-sm font-medium text-muted-foreground">
-                As vendas da camiseta estão encerradas.
-              </p>
-            </div>
 
           </div>
 
