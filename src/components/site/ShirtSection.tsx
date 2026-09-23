@@ -3,7 +3,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import camiseta-frente from "../../assets/camiseta-frente.png";
-import assets from "../../data/assets2.json";
+import asset from "../../data/assets2.json";
 
 import camiseta-verso from "../../assets/camiseta-verso.png";
 import assets from "../../data/assets3.json";
