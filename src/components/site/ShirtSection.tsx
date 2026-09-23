@@ -1,4 +1,4 @@
-```tsx
+
 import camisetaFrente from "../../assets/camiseta-frente.png";
 import camisetaVerso from "../../assets/camiseta-verso.png";
 
