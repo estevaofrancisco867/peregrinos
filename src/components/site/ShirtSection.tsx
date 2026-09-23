@@ -15,7 +15,7 @@ export function ShirtSection({
 
         <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-12">
 
-          {/* IMAGENS DA CAMISETA */}
+          {/* IMAGENS */}
           <div className="grid grid-cols-2 gap-4">
 
             {/* FRENTE */}
@@ -25,11 +25,11 @@ export function ShirtSection({
                 <img
                   src={camisetaFrente}
                   alt="Frente da camiseta oficial da peregrinação"
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-contain mix-blend-multiply"
                 />
               </div>
 
-              <figcaption className="mt-3 text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
+              <figcaption className="mt-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">
                 Frente
               </figcaption>
 
@@ -42,11 +42,11 @@ export function ShirtSection({
                 <img
                   src={camisetaVerso}
                   alt="Verso da camiseta oficial da peregrinação"
-                  className="h-full w-full object-contain"
+                  className="h-full w-full object-contain mix-blend-multiply"
                 />
               </div>
 
-              <figcaption className="mt-3 text-xs font-medium uppercase tracking-[0.25em] text-muted-foreground">
+              <figcaption className="mt-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">
                 Verso
               </figcaption>
 
