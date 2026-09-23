@@ -2,8 +2,12 @@ import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import frente from "@/assets/camiseta-frente.png.asset.json";
-import verso from "@/assets/camiseta-verso.png.asset.json";
+import trilha from "../../assets/camiseta-frente.png";
+import asset from "../../data/assets2.json";
+
+import trilha from "../../assets/camiseta-verso.png";
+import asset from "../../data/assets3.json";
+
 import type { SiteContent } from "@/lib/site-data";
 
 const sizes = ["PP", "P", "M", "G", "GG", "XG"];
