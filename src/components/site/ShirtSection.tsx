@@ -3,10 +3,10 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import camiseta-frente from "../../assets/camiseta-frente.png";
-import asset from "../../data/assets2.json";
+import assets from "../../data/assets2.json";
 
 import camiseta-verso from "../../assets/camiseta-verso.png";
-import asset from "../../data/assets3.json";
+import assets from "../../data/assets3.json";
 
 import type { SiteContent } from "@/lib/site-data";
 
