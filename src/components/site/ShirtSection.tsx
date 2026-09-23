@@ -54,8 +54,9 @@ export function ShirtSection({ content }: { content: SiteContent }) {
         <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-12">
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {[
-              { src: frente.url, label: "Frente" },
-              { src: verso.url, label: "Verso" },
+              { src: camiseta-frente, label: asset2.original_filename },  
+    
+              { src: camiseta-verso, label: asset3.original_filename },
             ].map((item) => (
               <figure
                 key={item.label}
