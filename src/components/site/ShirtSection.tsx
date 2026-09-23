@@ -14,7 +14,7 @@ export function ShirtSection({
 
         <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-12">
 
-          {/* IMAGENS COM CARD E CAMISETA SEM FUNDO */}
+          {/* IMAGENS COM CARD, SEM FUNDO E DO MESMO TAMANHO */}
           <div className="grid grid-cols-2 gap-4 sm:gap-6">
 
             {[
@@ -31,11 +31,11 @@ export function ShirtSection({
                 key={item.label}
                 className="group relative rounded-3xl border border-border/60 bg-white p-5 text-center shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/30 flex flex-col justify-between"
               >
-                <div className="flex items-center justify-center h-48 sm:h-64 w-full overflow-hidden py-2">
+                <div className="flex items-center justify-center h-52 sm:h-64 w-full overflow-hidden py-2">
                   <img
                     src={item.src}
                     alt={`Camiseta oficial da peregrinação - Vista ${item.label}`}
-                    className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105 bg-transparent mix-blend-multiply"
+                    className="h-44 w-44 sm:h-56 sm:w-56 object-contain mx-auto transition-transform duration-500 group-hover:scale-105 bg-transparent mix-blend-multiply"
                   />
                 </div>
 
