@@ -54,7 +54,7 @@ export function ShirtSection({
               Camiseta oficial
             </p>
 
-            <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
+            <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl">
               Camiseta oficial da peregrinação
             </h2>
 
