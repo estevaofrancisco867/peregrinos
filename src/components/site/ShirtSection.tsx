@@ -1,55 +1,47 @@
-```tsx
+
 import camisetaFrente from "../../assets/camiseta-frente.png";
 import camisetaVerso from "../../assets/camiseta-verso.png";
 
 import type { SiteContent } from "@/lib/site-data";
 
-export function ShirtSection({
-  content,
-}: {
-  content: SiteContent;
-}) {
+export function ShirtSection({ content }: { content: SiteContent }) {
   return (
     <section id="camiseta" className="section-pad bg-muted">
       <div className="mx-auto max-w-6xl px-5">
 
         <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-12">
 
-          {/* IMAGENS */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* IMAGENS DAS CAMISETAS */}
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
 
             {/* FRENTE */}
-            <figure className="text-center">
-
-              <div className="flex h-64 w-full items-center justify-center sm:h-80">
+            <figure className="card-lift rounded-2xl border border-border bg-card p-3 text-center sm:p-4">
+              <div className="flex h-36 w-full items-center justify-center sm:h-56">
                 <img
                   src={camisetaFrente}
-                  alt="Frente da camiseta oficial da peregrinação"
-                  className="h-full w-full object-contain mix-blend-multiply"
+                  alt="Camiseta oficial da peregrinação — frente"
+                  className="h-full w-full object-contain"
                 />
               </div>
 
               <figcaption className="mt-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">
                 Frente
               </figcaption>
-
             </figure>
 
             {/* VERSO */}
-            <figure className="text-center">
-
-              <div className="flex h-64 w-full items-center justify-center sm:h-80">
+            <figure className="card-lift rounded-2xl border border-border bg-card p-3 text-center sm:p-4">
+              <div className="flex h-36 w-full items-center justify-center sm:h-56">
                 <img
                   src={camisetaVerso}
-                  alt="Verso da camiseta oficial da peregrinação"
-                  className="h-full w-full object-contain mix-blend-multiply"
+                  alt="Camiseta oficial da peregrinação — verso"
+                  className="h-full w-full object-contain"
                 />
               </div>
 
               <figcaption className="mt-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">
                 Verso
               </figcaption>
-
             </figure>
 
           </div>
