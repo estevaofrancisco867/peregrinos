@@ -1,10 +1,13 @@
-```tsx
 import camisetaFrente from "../../assets/camiseta-frente.png";
 import camisetaVerso from "../../assets/camiseta-verso.png";
 
 import type { SiteContent } from "@/lib/site-data";
 
-export function ShirtSection({ content }: { content: SiteContent }) {
+export function ShirtSection({
+  content,
+}: {
+  content: SiteContent;
+}) {
   return (
     <section id="camiseta" className="section-pad bg-muted">
       <div className="mx-auto max-w-6xl px-5">
@@ -12,58 +15,66 @@ export function ShirtSection({ content }: { content: SiteContent }) {
         <div className="grid gap-8 md:grid-cols-2 md:items-center md:gap-12">
 
           {/* IMAGENS */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6">
 
-            {/* FRENTE */}
-            <div className="text-center">
+            {[
+              {
+                src: camisetaFrente,
+                label: "Frente",
+              },
+              {
+                src: camisetaVerso,
+                label: "Verso",
+              },
+            ].map((item) => (
+              <figure
+                key={item.label}
+                className="group relative rounded-3xl border border-border/60 bg-white p-5 text-center shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/30 flex flex-col justify-between"
+              >
+                <div className="flex items-center justify-center h-48 sm:h-64 w-full overflow-hidden py-2">
+                  <img
+                    src={item.src}
+                    alt={`Camiseta oficial da peregrinação - Vista ${item.label}`}
+                    className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
 
-              <div className="flex h-56 items-center justify-center sm:h-72">
-                <img
-                  src={camisetaFrente}
-                  alt="Frente"
-                  className="h-full w-full object-contain"
-                />
-              </div>
-
-              <p className="mt-3 text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-                Frente
-              </p>
-
-            </div>
-
-            {/* VERSO */}
-            <div className="text-center">
-
-              <div className="flex h-56 items-center justify-center sm:h-72">
-                <img
-                  src={camisetaVerso}
-                  alt="Verso"
-                  className="h-full w-full object-contain"
-                />
-              </div>
-
-              <p className="mt-3 text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-                Verso
-              </p>
-
-            </div>
+                <figcaption className="mt-4 inline-flex items-center justify-center self-center px-4 py-1.5 rounded-full bg-muted/60 text-xs font-semibold uppercase tracking-[0.2em] text-foreground/80 border border-border/40">
+                  {item.label}
+                </figcaption>
+              </figure>
+            ))}
 
           </div>
 
-          {/* TEXTO */}
+          {/* INFORMAÇÕES */}
           <div>
 
-            <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl">
+            <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
+              Camiseta oficial
+            </p>
+
+            <h2 className="mt-3 text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
               Camiseta oficial da peregrinação
             </h2>
 
-            <p className="mt-4 text-muted-foreground">
+            <p className="mt-4 text-muted-foreground leading-relaxed">
               {content["shirt_subtitle"]}
             </p>
 
-            <ul className="mt-6 space-y-2 text-sm text-muted-foreground">
-              <li>• Todos os tamanhos disponíveis (PP ao XG)</li>
-              <li>• Estampa frente e verso com o mapa do caminho</li>
+            <ul className="mt-6 space-y-2.5 text-sm text-muted-foreground">
+              <li className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                Todos os tamanhos disponíveis (PP ao XG)
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                Estampa frente e verso com o mapa do caminho
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                Tecido leve e confortável
+              </li>
             </ul>
 
           </div>
@@ -74,4 +85,3 @@ export function ShirtSection({ content }: { content: SiteContent }) {
     </section>
   );
 }
-```
