@@ -39,7 +39,7 @@ export function Header() {
             to="/"
             className="truncate font-display text-base tracking-[0.2em] uppercase sm:text-lg"
           >
-            Peregrinos da Fé
+            Igreja Católica
           </Link>
 
           <button
