@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { translateUserMessage } from "@/lib/messages";
 
-export type FieldType = "text" | "textarea" | "number" | "date";
+export type FieldType = "text" | "textarea" | "number" | "date" | "url" | "image";
 
 export type Field = {
   name: string;
@@ -12,6 +12,24 @@ export type Field = {
 };
 
 type Row = Record<string, unknown> & { id: string };
+
+// Função auxiliar para converter links do Google Drive em formato utilizável/incorporável
+function formatGoogleDriveUrl(url: string): string {
+  if (!url) return url;
+  
+  // Exemplo de link padrão: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+  // ou https://drive.google.com/open?id=FILE_ID
+  const fileIdMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  
+  if (fileIdMatch && fileIdMatch[1]) {
+    const fileId = fileIdMatch[1];
+    // Se preferir o link de visualização direta ou download:
+    // Para imagens/thumbnails: `https://drive.google.com/uc?export=view&id=${fileId}`
+    return `https://drive.google.com/uc?export=view&id=${fileId}`;
+  }
+  
+  return url;
+}
 
 export function AdminCrud({
   table,
@@ -57,7 +75,14 @@ export function AdminCrud({
     const payload: Record<string, unknown> = {};
     for (const field of fields) {
       const value = draft[field.name] ?? "";
-      payload[field.name] = field.type === "number" ? Number(value || 0) : value;
+      if (field.type === "number") {
+        payload[field.name] = Number(value || 0);
+      } else if (field.type === "url" || field.type === "image") {
+        // Formata automaticamente se for um link do Google Drive
+        payload[field.name] = formatGoogleDriveUrl(value);
+      } else {
+        payload[field.name] = value;
+      }
     }
     return payload;
   }
@@ -111,7 +136,7 @@ export function AdminCrud({
         {fields.map((field) => (
           <div key={field.name} className={field.type === "textarea" ? "md:col-span-2" : ""}>
             <label className="text-sm font-medium" htmlFor={`${table}-${field.name}`}>
-              {field.label}
+              {field.label} {field.type === "image" || field.type === "url" ? <span className="text-xs text-muted-foreground">(Aceita link do Google Drive)</span> : null}
             </label>
             {field.type === "textarea" ? (
               <textarea
@@ -124,7 +149,16 @@ export function AdminCrud({
             ) : (
               <input
                 id={`${table}-${field.name}`}
-                type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
+                type={
+                  field.type === "number"
+                    ? "number"
+                    : field.type === "date"
+                    ? "date"
+                    : field.type === "url" || field.type === "image"
+                    ? "url"
+                    : "text"
+                }
+                placeholder={field.type === "url" || field.type === "image" ? "https://drive.google.com/..." : ""}
                 value={draft[field.name] ?? ""}
                 onChange={(e) => setDraft({ ...draft, [field.name]: e.target.value })}
                 className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2"
