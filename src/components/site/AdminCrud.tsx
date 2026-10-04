@@ -1,265 +1,182 @@
-import { useEffect, useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminCrud } from "@/components/site/AdminCrud";
-import { claimAdminRole } from "@/lib/admin.functions";
-import { ordersQuery, siteContentQuery } from "@/lib/site-data";
+import { translateUserMessage } from "@/lib/messages";
 
-export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({
-    meta: [
-      { title: "Painel da coordenação | Peregrinos da Fé" },
-      {
-        name: "description",
-        content:
-          "Painel interno dos Peregrinos da Fé para atualizar o conteúdo do site e acompanhar os pedidos de camiseta.",
-      },
-      { property: "og:title", content: "Painel da coordenação | Peregrinos da Fé" },
-      {
-        property: "og:description",
-        content: "Painel interno dos Peregrinos da Fé.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
-  component: AdminPage,
-});
+export type FieldType = "text" | "textarea" | "number" | "date";
 
-function AdminPage() {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const claim = useServerFn(claimAdminRole);
-  const [status, setStatus] = useState<"checking" | "admin" | "denied">("checking");
-
-  useEffect(() => {
-    let active = true;
-    claim()
-      .then((result) => {
-        if (active) setStatus(result.isAdmin ? "admin" : "denied");
-      })
-      .catch(() => {
-        if (active) setStatus("denied");
-      });
-    return () => {
-      active = false;
-    };
-  }, [claim]);
-
-  async function signOut() {
-    await queryClient.cancelQueries();
-    queryClient.clear();
-    await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
-  }
-
-  return (
-    <div className="min-h-screen bg-muted">
-      <header className="hero-surface">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-6">
-          <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-gold">Peregrinos da Fé</p>
-            <h1 className="mt-1 text-2xl">Painel da coordenação</h1>
-          </div>
-          <div className="flex gap-3 text-sm">
-            <a href="/" className="rounded-full border border-white/40 px-4 py-2">
-              Ver o site
-            </a>
-            <button
-              type="button"
-              onClick={signOut}
-              className="rounded-full bg-gold px-4 py-2 font-semibold text-gold-foreground"
-            >
-              Sair
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-6xl space-y-6 px-5 py-10">
-        {status === "checking" ? <p className="text-sm text-muted-foreground">Carregando...</p> : null}
-
-        {status === "denied" ? (
-          <div className="rounded-2xl border border-border bg-card p-6">
-            <h2 className="text-xl">Acesso não liberado</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Esta conta ainda não tem permissão de coordenação. Peça a liberação para o responsável
-              pelo site.
-            </p>
-          </div>
-        ) : null}
-
-        {status === "admin" ? <AdminContent /> : null}
-      </main>
-    </div>
-  );
-}
-
-function AdminContent() {
-  return (
-    <div className="space-y-6">
-      <OrdersPanel />
-      <SiteContentPanel />
-
-      <AdminCrud
-        table="news"
-        queryKey="news"
-        title="Notícias"
-        description="Novidades exibidas na página inicial."
-        fields={[
-          { name: "title", label: "Título" },
-          { name: "summary", label: "Resumo" },
-          { name: "body", label: "Texto completo", type: "textarea" },
-          { name: "image_url", label: "Link da imagem" },
-          { name: "published_at", label: "Data", type: "date" },
-          { name: "sort_order", label: "Ordem", type: "number" },
-        ]}
-      />
-
-      <AdminCrud
-        table="experiences"
-        queryKey="experiences"
-        title="Experiências"
-        fields={[
-          { name: "title", label: "Título" },
-          { name: "description", label: "Descrição", type: "textarea" },
-          { name: "image_url", label: "Link da imagem" },
-          { name: "sort_order", label: "Ordem", type: "number" },
-        ]}
-      />
-
-      <AdminCrud
-        table="gallery"
-        queryKey="gallery"
-        title="Galeria"
-        fields={[
-          { name: "title", label: "Legenda" },
-          { name: "image_url", label: "Link da imagem" },
-          { name: "sort_order", label: "Ordem", type: "number" },
-        ]}
-      />
-
-      <AdminCrud
-        table="testimonials"
-        queryKey="testimonials"
-        title="Relatos"
-        fields={[
-          { name: "author", label: "Nome" },
-          { name: "role", label: "Função" },
-          { name: "message", label: "Relato", type: "textarea" },
-          { name: "sort_order", label: "Ordem", type: "number" },
-        ]}
-      />
-
-      <AdminCrud
-        table="verses"
-        queryKey="verses"
-        title="Versículos"
-        fields={[
-          { name: "reference", label: "Referência" },
-          { name: "text", label: "Texto", type: "textarea" },
-          { name: "sort_order", label: "Ordem", type: "number" },
-        ]}
-      />
-
-      <AdminCrud
-        table="leaders"
-        queryKey="leaders"
-        title="Coordenação"
-        fields={[
-          { name: "name", label: "Nome" },
-          { name: "role", label: "Função" },
-          { name: "bio", label: "Sobre", type: "textarea" },
-          { name: "image_url", label: "Link da foto" },
-          { name: "sort_order", label: "Ordem", type: "number" },
-        ]}
-      />
-    </div>
-  );
-}
-
-
-const CONTENT_LABELS: Record<string, string> = {
-  about_title: 'Título da seção "Quem somos"',
-  about_text: 'Resumo de "Quem somos"',
-  about_long: 'Texto completo de "Quem somos"',
-  form_url: "Link do formulário de inscrição",
-  shirt_subtitle: "Descrição da camiseta",
-  hero_title: "Título principal do site",
-  hero_subtitle: "Frase de apoio do título principal",
+export type Field = {
+  name: string;
+  label: string;
+  type?: FieldType;
 };
 
-function contentLabel(key: string) {
-  return CONTENT_LABELS[key] ?? key;
-}
+type Row = Record<string, unknown> & { id: string };
 
-function OrdersPanel() {
+export function AdminCrud({
+  table,
+  title,
+  description,
+  fields,
+  queryKey,
+}: {
+  table: string;
+  title: string;
+  description?: string;
+  fields: Field[];
+  queryKey: string;
+}) {
   const queryClient = useQueryClient();
-  const { data: orders = [] } = useQuery(ordersQuery);
+  const [draft, setDraft] = useState<Record<string, string>>({});
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
-  async function updateStatus(id: string, status: string) {
-    await supabase.from("shirt_orders").update({ status }).eq("id", id);
-    queryClient.invalidateQueries({ queryKey: ["shirt_orders"] });
+  const { data: rows = [] } = useQuery({
+    queryKey: [queryKey],
+    queryFn: async () => {
+      const { data, error: err } = await supabase
+        .from(table as never)
+        .select("*")
+        .order("sort_order", { ascending: true });
+      if (err) throw err;
+      return (data ?? []) as Row[];
+    },
+  });
+
+  function reset() {
+    setDraft({});
+    setEditingId(null);
+  }
+
+  function refresh() {
+    queryClient.invalidateQueries({ queryKey: [queryKey] });
+  }
+
+  function toPayload() {
+    const payload: Record<string, unknown> = {};
+    for (const field of fields) {
+      const value = draft[field.name] ?? "";
+      payload[field.name] = field.type === "number" ? Number(value || 0) : value;
+    }
+    return payload;
+  }
+
+  async function save(event: React.FormEvent) {
+    event.preventDefault();
+    setBusy(true);
+    setError(null);
+    try {
+      const payload = toPayload();
+      const request = editingId
+        ? supabase
+            .from(table as never)
+            .update(payload as never)
+            .eq("id", editingId)
+        : supabase.from(table as never).insert(payload as never);
+      const { error: err } = await request;
+      if (err) throw err;
+      reset();
+      refresh();
+    } catch (err) {
+      setError(err instanceof Error ? translateUserMessage(err.message) : "Não foi possível salvar.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   async function remove(id: string) {
-    if (!window.confirm("Excluir este pedido?")) return;
-    await supabase.from("shirt_orders").delete().eq("id", id);
-    queryClient.invalidateQueries({ queryKey: ["shirt_orders"] });
+    if (!window.confirm("Excluir este item?")) return;
+    const { error: err } = await supabase
+      .from(table as never)
+      .delete()
+      .eq("id", id);
+    if (err) setError(translateUserMessage(err.message));
+    refresh();
   }
-}
 
-function SiteContentPanel() {
-  const queryClient = useQueryClient();
-  const { data: content = {} } = useQuery(siteContentQuery);
-  const [draft, setDraft] = useState<Record<string, string>>({});
-  const [saved, setSaved] = useState(false);
-
-  const values = { ...content, ...draft };
-
-  async function save(key: string) {
-    await supabase.from("site_content").update({ value: values[key] ?? "" }).eq("key", key);
-    await queryClient.invalidateQueries({ queryKey: ["site_content"] });
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 2000);
+  function edit(row: Row) {
+    const next: Record<string, string> = {};
+    for (const field of fields) next[field.name] = String(row[field.name] ?? "");
+    setDraft(next);
+    setEditingId(row.id);
   }
 
   return (
     <section className="rounded-2xl border border-border bg-card p-6">
-      <h2 className="text-xl">Textos do site</h2>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Ajuste títulos, textos e links exibidos nas páginas.
-      </p>
-      {saved ? <p className="mt-2 text-sm text-primary">Alteração salva.</p> : null}
+      <h3 className="text-xl">{title}</h3>
+      {description ? <p className="mt-1 text-sm text-muted-foreground">{description}</p> : null}
 
-      <div className="mt-5 space-y-4">
-        {Object.keys(content)
-          .sort()
-          .map((key) => (
-            <div key={key} className="grid gap-2 md:grid-cols-[220px_1fr_auto] md:items-start">
-              <label className="pt-2 text-sm font-medium" htmlFor={`content-${key}`}>
-                {contentLabel(key)}
-              </label>
+      <form onSubmit={save} className="mt-5 grid gap-3 md:grid-cols-2">
+        {fields.map((field) => (
+          <div key={field.name} className={field.type === "textarea" ? "md:col-span-2" : ""}>
+            <label className="text-sm font-medium" htmlFor={`${table}-${field.name}`}>
+              {field.label}
+            </label>
+            {field.type === "textarea" ? (
               <textarea
-                id={`content-${key}`}
-                rows={2}
-                value={values[key] ?? ""}
-                onChange={(e) => setDraft({ ...draft, [key]: e.target.value })}
-                className="w-full rounded-lg border border-border bg-background px-3 py-2"
+                id={`${table}-${field.name}`}
+                rows={3}
+                value={draft[field.name] ?? ""}
+                onChange={(e) => setDraft({ ...draft, [field.name]: e.target.value })}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2"
               />
+            ) : (
+              <input
+                id={`${table}-${field.name}`}
+                type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
+                value={draft[field.name] ?? ""}
+                onChange={(e) => setDraft({ ...draft, [field.name]: e.target.value })}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2"
+              />
+            )}
+          </div>
+        ))}
+        <div className="flex items-center gap-3 md:col-span-2">
+          <button
+            type="submit"
+            disabled={busy}
+            className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+          >
+            {editingId ? "Salvar alterações" : "Adicionar"}
+          </button>
+          {editingId ? (
+            <button type="button" onClick={reset} className="text-sm underline">
+              Cancelar edição
+            </button>
+          ) : null}
+        </div>
+      </form>
+
+      {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
+
+      <ul className="mt-6 divide-y divide-border">
+        {rows.map((row) => (
+          <li key={row.id} className="flex items-start justify-between gap-4 py-3">
+            <div className="min-w-0">
+              <p className="truncate font-medium">{String(row[fields[0]!.name] ?? "(sem título)")}</p>
+              <p className="truncate text-sm text-muted-foreground">
+                {String(row[fields[1]?.name ?? ""] ?? "")}
+              </p>
+            </div>
+            <div className="flex shrink-0 gap-3 text-sm">
+              <button type="button" onClick={() => edit(row)} className="text-primary underline">
+                Editar
+              </button>
               <button
                 type="button"
-                onClick={() => save(key)}
-                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                onClick={() => remove(row.id)}
+                className="text-destructive underline"
               >
-                Salvar
+                Excluir
               </button>
             </div>
-          ))}
-      </div>
+          </li>
+        ))}
+        {rows.length === 0 ? (
+          <li className="py-3 text-sm text-muted-foreground">Nenhum item cadastrado.</li>
+        ) : null}
+      </ul>
     </section>
   );
 }
