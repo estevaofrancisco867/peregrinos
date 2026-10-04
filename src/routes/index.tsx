@@ -37,6 +37,20 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
+// Função para garantir que qualquer link do Google Drive vire um link direto de imagem compatível
+function resolveImageUrl(url: string): string {
+  if (!url) return "";
+  if (url.includes("lh3.googleusercontent.com")) return url;
+
+  // Extrai o ID de links do Google Drive (/file/d/ID ou id=ID)
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+  }
+
+  return url; // Retorna normal se for Unsplash ou outra URL externa
+}
+
 function Home() {
   const content = useQuery(siteContentQuery).data ?? {};
   const news = useQuery(newsQuery).data ?? [];
@@ -84,7 +98,7 @@ function Home() {
               className="card-lift hover:card-lift-hover flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
             >
               <img
-                src={item.image_url}
+                src={resolveImageUrl(item.image_url)}
                 alt={item.title}
                 loading="lazy"
                 className="h-44 w-full object-cover"
@@ -117,7 +131,7 @@ function Home() {
           {experiences.map((item) => (
             <article key={item.id} className="card-lift overflow-hidden rounded-2xl border border-border bg-card">
               <img
-                src={item.image_url}
+                src={resolveImageUrl(item.image_url)}
                 alt={item.title}
                 loading="lazy"
                 className="h-72 w-full object-cover"
@@ -141,7 +155,7 @@ function Home() {
           {gallery.map((item) => (
             <img
               key={item.id}
-              src={item.image_url}
+              src={resolveImageUrl(item.image_url)}
               alt={item.title || "Foto da peregrinação"}
               loading="lazy"
               className="h-56 w-full rounded-2xl object-cover"
@@ -205,7 +219,7 @@ function Home() {
               className="card-lift overflow-hidden rounded-2xl border border-border bg-card text-center"
             >
               <img
-                src={item.image_url}
+                src={resolveImageUrl(item.image_url)}
                 alt={item.name}
                 loading="lazy"
                 className="h-56 w-full object-cover"
