@@ -1,36 +1,27 @@
-// Salvar em: src/lib/drive-image.ts
-//
-// Converte links de compartilhamento do Google Drive em uma URL que pode ser
-// usada direto em <img src="...">. Qualquer outro link é devolvido sem alteração.
-//
-// Formatos aceitos:
-//   https://drive.google.com/file/d/ID/view?usp=sharing
-//   https://drive.google.com/open?id=ID
-//   https://drive.google.com/uc?export=view&id=ID
-//
-// O arquivo no Drive precisa estar compartilhado como
-// "Qualquer pessoa com o link" (Leitor).
+import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-export function extractDriveId(url: string): string | null {
-  const value = url.trim();
-  if (!/(^|\.)drive\.google\.com|docs\.google\.com/.test(value)) return null;
+// E-mails autorizados a assumir o papel de coordenação (admin).
+const ALLOWED_ADMIN_EMAILS = ["estevaofrancisco867@gmail.com"];
 
-  const fromPath = value.match(/\/file\/d\/([\w-]+)/)?.[1];
-  const fromQuery = value.match(/[?&]id=([\w-]+)/)?.[1];
-  return fromPath ?? fromQuery ?? null;
-}
+export const claimAdminRole = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const email = String(context.claims["email"] ?? "").toLowerCase();
 
-export function normalizeImageUrl(url: string | null | undefined): string {
-  const value = (url ?? "").trim();
-  if (!value) return "";
+    const { data: alreadyAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (alreadyAdmin) return { isAdmin: true };
 
-  const id = extractDriveId(value);
-  if (!id) return value;
+    if (!ALLOWED_ADMIN_EMAILS.includes(email)) return { isAdmin: false };
 
-  // O endpoint "thumbnail" costuma ser mais estável que "uc?export=view".
-  return `https://drive.google.com/thumbnail?id=${id}&sz=w1600`;
-}
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("user_roles")
+      .insert({ user_id: context.userId, role: "admin" });
+    if (error && !error.message.includes("duplicate")) throw error;
 
-export function isDriveFolderLink(url: string): boolean {
-  return /drive\.google\.com\/drive\/folders\//.test(url);
-}
+    return { isAdmin: true };
+  });
