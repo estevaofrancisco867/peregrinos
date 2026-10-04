@@ -113,7 +113,7 @@ function AdminContent() {
           { name: "title", label: "Título" },
           { name: "summary", label: "Resumo" },
           { name: "body", label: "Texto completo", type: "textarea" },
-          { name: "image_url", label: "Link da imagem" },
+          { name: "image_url", label: "Imagem (link do Google Drive ou outro)", type: "image" },
           { name: "published_at", label: "Data", type: "date" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
@@ -126,7 +126,7 @@ function AdminContent() {
         fields={[
           { name: "title", label: "Título" },
           { name: "description", label: "Descrição", type: "textarea" },
-          { name: "image_url", label: "Link da imagem" },
+          { name: "image_url", label: "Imagem (link do Google Drive ou outro)", type: "image" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
       />
@@ -137,7 +137,7 @@ function AdminContent() {
         title="Galeria"
         fields={[
           { name: "title", label: "Legenda" },
-          { name: "image_url", label: "Link da imagem" },
+          { name: "image_url", label: "Imagem (link do Google Drive ou outro)", type: "image" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
       />
@@ -173,14 +173,13 @@ function AdminContent() {
           { name: "name", label: "Nome" },
           { name: "role", label: "Função" },
           { name: "bio", label: "Sobre", type: "textarea" },
-          { name: "image_url", label: "Link da foto" },
+          { name: "image_url", label: "Foto (link do Google Drive ou outro)", type: "image" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
       />
     </div>
   );
 }
-
 
 const CONTENT_LABELS: Record<string, string> = {
   about_title: 'Título da seção "Quem somos"',
@@ -196,6 +195,11 @@ function contentLabel(key: string) {
   return CONTENT_LABELS[key] ?? key;
 }
 
+// ATENÇÃO: versão provisória. Como não vi as colunas de "shirt_orders",
+// cada pedido é exibido de forma genérica (todas as colunas, menos id/status).
+// Ajuste as opções de status para os valores que você usa no banco.
+const ORDER_STATUSES = ["pendente", "pago", "entregue", "cancelado"];
+
 function OrdersPanel() {
   const queryClient = useQueryClient();
   const { data: orders = [] } = useQuery(ordersQuery);
@@ -210,6 +214,61 @@ function OrdersPanel() {
     await supabase.from("shirt_orders").delete().eq("id", id);
     queryClient.invalidateQueries({ queryKey: ["shirt_orders"] });
   }
+
+  const list = orders as Array<Record<string, unknown> & { id: string }>;
+
+  return (
+    <section className="rounded-2xl border border-border bg-card p-6">
+      <h2 className="text-xl">Pedidos de camiseta</h2>
+      <p className="mt-1 text-sm text-muted-foreground">
+        {list.length} {list.length === 1 ? "pedido" : "pedidos"} recebidos.
+      </p>
+
+      <ul className="mt-5 divide-y divide-border">
+        {list.map((order) => (
+          <li key={order.id} className="flex flex-wrap items-start justify-between gap-4 py-3">
+            <dl className="grid min-w-0 flex-1 gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
+              {Object.entries(order)
+                .filter(([key]) => key !== "id" && key !== "status")
+                .map(([key, value]) => (
+                  <div key={key} className="min-w-0">
+                    <dt className="text-xs uppercase text-muted-foreground">{key}</dt>
+                    <dd className="truncate">{String(value ?? "")}</dd>
+                  </div>
+                ))}
+            </dl>
+            <div className="flex shrink-0 items-center gap-3 text-sm">
+              <select
+                value={String(order.status ?? "")}
+                onChange={(e) => updateStatus(order.id, e.target.value)}
+                className="rounded-lg border border-border bg-background px-3 py-2"
+                aria-label="Status do pedido"
+              >
+                {!ORDER_STATUSES.includes(String(order.status ?? "")) ? (
+                  <option value={String(order.status ?? "")}>{String(order.status ?? "")}</option>
+                ) : null}
+                {ORDER_STATUSES.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                onClick={() => remove(order.id)}
+                className="text-destructive underline"
+              >
+                Excluir
+              </button>
+            </div>
+          </li>
+        ))}
+        {list.length === 0 ? (
+          <li className="py-3 text-sm text-muted-foreground">Nenhum pedido ainda.</li>
+        ) : null}
+      </ul>
+    </section>
+  );
 }
 
 function SiteContentPanel() {
