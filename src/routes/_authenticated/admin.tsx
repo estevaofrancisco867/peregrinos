@@ -113,7 +113,7 @@ function AdminContent() {
           { name: "title", label: "Título" },
           { name: "summary", label: "Resumo" },
           { name: "body", label: "Texto completo", type: "textarea" },
-          { name: "image_url", label: "Imagem (link do Google Drive ou outro)", type: "image" },
+          { name: "image_url", label: "Imagem (link do Google Drive)", type: "image" },
           { name: "published_at", label: "Data", type: "date" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
@@ -126,7 +126,7 @@ function AdminContent() {
         fields={[
           { name: "title", label: "Título" },
           { name: "description", label: "Descrição", type: "textarea" },
-          { name: "image_url", label: "Imagem (link do Google Drive ou outro)", type: "image" },
+          { name: "image_url", label: "Imagem (link do Google Drive)", type: "image" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
       />
@@ -137,7 +137,7 @@ function AdminContent() {
         title="Galeria"
         fields={[
           { name: "title", label: "Legenda" },
-          { name: "image_url", label: "Imagem (link do Google Drive ou outro)", type: "image" },
+          { name: "image_url", label: "Imagem (link do Google Drive)", type: "image" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
       />
@@ -173,7 +173,7 @@ function AdminContent() {
           { name: "name", label: "Nome" },
           { name: "role", label: "Função" },
           { name: "bio", label: "Sobre", type: "textarea" },
-          { name: "image_url", label: "Foto (link do Google Drive ou outro)", type: "image" },
+          { name: "image_url", label: "Foto (link do Google Drive)", type: "image" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
       />
@@ -195,9 +195,6 @@ function contentLabel(key: string) {
   return CONTENT_LABELS[key] ?? key;
 }
 
-// ATENÇÃO: versão provisória. Como não vi as colunas de "shirt_orders",
-// cada pedido é exibido de forma genérica (todas as colunas, menos id/status).
-// Ajuste as opções de status para os valores que você usa no banco.
 const ORDER_STATUSES = ["pendente", "pago", "entregue", "cancelado"];
 
 function OrdersPanel() {
