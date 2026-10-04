@@ -2,9 +2,8 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { translateUserMessage } from "@/lib/messages";
-import { isDriveFolderLink, normalizeImageUrl } from "@/lib/drive-image";
 
-export type FieldType = "text" | "textarea" | "number" | "date" | "image";
+export type FieldType = "text" | "textarea" | "number" | "date";
 
 export type Field = {
   name: string;
@@ -58,17 +57,7 @@ export function AdminCrud({
     const payload: Record<string, unknown> = {};
     for (const field of fields) {
       const value = draft[field.name] ?? "";
-      if (field.type === "number") {
-        payload[field.name] = Number(value || 0);
-      } else if (field.type === "date") {
-        // Postgres rejeita "" em coluna date.
-        payload[field.name] = value === "" ? null : value;
-      } else if (field.type === "image") {
-        // Converte links do Google Drive em URL direta de imagem.
-        payload[field.name] = normalizeImageUrl(value);
-      } else {
-        payload[field.name] = value;
-      }
+      payload[field.name] = field.type === "number" ? Number(value || 0) : value;
     }
     return payload;
   }
@@ -78,13 +67,6 @@ export function AdminCrud({
     setBusy(true);
     setError(null);
     try {
-      for (const field of fields) {
-        if (field.type === "image" && isDriveFolderLink(draft[field.name] ?? "")) {
-          throw new Error(
-            "Esse é o link de uma pasta do Drive. Abra a imagem, clique em Compartilhar e copie o link do arquivo.",
-          );
-        }
-      }
       const payload = toPayload();
       const request = editingId
         ? supabase
@@ -126,56 +108,30 @@ export function AdminCrud({
       {description ? <p className="mt-1 text-sm text-muted-foreground">{description}</p> : null}
 
       <form onSubmit={save} className="mt-5 grid gap-3 md:grid-cols-2">
-        {fields.map((field) => {
-          const id = `${table}-${field.name}`;
-          const previewUrl =
-            field.type === "image" ? normalizeImageUrl(draft[field.name]) : "";
-
-          return (
-            <div key={field.name} className={field.type === "textarea" ? "md:col-span-2" : ""}>
-              <label className="text-sm font-medium" htmlFor={id}>
-                {field.label}
-              </label>
-              {field.type === "textarea" ? (
-                <textarea
-                  id={id}
-                  rows={3}
-                  value={draft[field.name] ?? ""}
-                  onChange={(e) => setDraft({ ...draft, [field.name]: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2"
-                />
-              ) : (
-                <input
-                  id={id}
-                  type={
-                    field.type === "number" ? "number" : field.type === "date" ? "date" : "text"
-                  }
-                  value={draft[field.name] ?? ""}
-                  onChange={(e) => setDraft({ ...draft, [field.name]: e.target.value })}
-                  placeholder={
-                    field.type === "image" ? "Cole o link do Google Drive ou de qualquer imagem" : undefined
-                  }
-                  className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2"
-                />
-              )}
-              {field.type === "image" ? (
-                <div className="mt-2">
-                  <p className="text-xs text-muted-foreground">
-                    No Drive, compartilhe como "Qualquer pessoa com o link" e cole o link aqui.
-                  </p>
-                  {previewUrl ? (
-                    <img
-                      src={previewUrl}
-                      alt="Pré-visualização"
-                      referrerPolicy="no-referrer"
-                      className="mt-2 h-24 rounded-lg border border-border object-cover"
-                    />
-                  ) : null}
-                </div>
-              ) : null}
-            </div>
-          );
-        })}
+        {fields.map((field) => (
+          <div key={field.name} className={field.type === "textarea" ? "md:col-span-2" : ""}>
+            <label className="text-sm font-medium" htmlFor={`${table}-${field.name}`}>
+              {field.label}
+            </label>
+            {field.type === "textarea" ? (
+              <textarea
+                id={`${table}-${field.name}`}
+                rows={3}
+                value={draft[field.name] ?? ""}
+                onChange={(e) => setDraft({ ...draft, [field.name]: e.target.value })}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2"
+              />
+            ) : (
+              <input
+                id={`${table}-${field.name}`}
+                type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
+                value={draft[field.name] ?? ""}
+                onChange={(e) => setDraft({ ...draft, [field.name]: e.target.value })}
+                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2"
+              />
+            )}
+          </div>
+        ))}
         <div className="flex items-center gap-3 md:col-span-2">
           <button
             type="submit"
@@ -195,45 +151,28 @@ export function AdminCrud({
       {error ? <p className="mt-3 text-sm text-destructive">{error}</p> : null}
 
       <ul className="mt-6 divide-y divide-border">
-        {rows.map((row) => {
-          const imageField = fields.find((f) => f.type === "image");
-          const thumb = imageField ? normalizeImageUrl(String(row[imageField.name] ?? "")) : "";
-
-          return (
-            <li key={row.id} className="flex items-start justify-between gap-4 py-3">
-              <div className="flex min-w-0 items-start gap-3">
-                {thumb ? (
-                  <img
-                    src={thumb}
-                    alt=""
-                    referrerPolicy="no-referrer"
-                    className="h-12 w-12 shrink-0 rounded-md object-cover"
-                  />
-                ) : null}
-                <div className="min-w-0">
-                  <p className="truncate font-medium">
-                    {String(row[fields[0]!.name] ?? "(sem título)")}
-                  </p>
-                  <p className="truncate text-sm text-muted-foreground">
-                    {String(row[fields[1]?.name ?? ""] ?? "")}
-                  </p>
-                </div>
-              </div>
-              <div className="flex shrink-0 gap-3 text-sm">
-                <button type="button" onClick={() => edit(row)} className="text-primary underline">
-                  Editar
-                </button>
-                <button
-                  type="button"
-                  onClick={() => remove(row.id)}
-                  className="text-destructive underline"
-                >
-                  Excluir
-                </button>
-              </div>
-            </li>
-          );
-        })}
+        {rows.map((row) => (
+          <li key={row.id} className="flex items-start justify-between gap-4 py-3">
+            <div className="min-w-0">
+              <p className="truncate font-medium">{String(row[fields[0]!.name] ?? "(sem título)")}</p>
+              <p className="truncate text-sm text-muted-foreground">
+                {String(row[fields[1]?.name ?? ""] ?? "")}
+              </p>
+            </div>
+            <div className="flex shrink-0 gap-3 text-sm">
+              <button type="button" onClick={() => edit(row)} className="text-primary underline">
+                Editar
+              </button>
+              <button
+                type="button"
+                onClick={() => remove(row.id)}
+                className="text-destructive underline"
+              >
+                Excluir
+              </button>
+            </div>
+          </li>
+        ))}
         {rows.length === 0 ? (
           <li className="py-3 text-sm text-muted-foreground">Nenhum item cadastrado.</li>
         ) : null}
