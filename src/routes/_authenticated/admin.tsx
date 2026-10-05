@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminCrud } from "@/components/site/AdminCrud";
 import { claimAdminRole } from "@/lib/admin.functions";
-import { ordersQuery, siteContentQuery } from "@/lib/site-data";
+import { siteContentQuery } from "@/lib/site-data";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
       {
         name: "description",
         content:
-          "Painel interno dos Peregrinos da Fé para atualizar o conteúdo do site e acompanhar os pedidos de camiseta.",
+          "Painel interno dos Peregrinos da Fé para atualizar o conteúdo do site.",
       },
       { property: "og:title", content: "Painel da coordenação | Peregrinos da Fé" },
       {
@@ -101,7 +101,6 @@ function AdminPage() {
 function AdminContent() {
   return (
     <div className="space-y-6">
-      <OrdersPanel />
       <SiteContentPanel />
 
       <AdminCrud
@@ -113,7 +112,7 @@ function AdminContent() {
           { name: "title", label: "Título" },
           { name: "summary", label: "Resumo" },
           { name: "body", label: "Texto completo", type: "textarea" },
-          { name: "image_url", label: "Imagem (link do Google Drive)", type: "image" },
+          { name: "image_url", label: "Imagem", type: "image" },
           { name: "published_at", label: "Data", type: "date" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
@@ -126,7 +125,7 @@ function AdminContent() {
         fields={[
           { name: "title", label: "Título" },
           { name: "description", label: "Descrição", type: "textarea" },
-          { name: "image_url", label: "Imagem (link do Google Drive)", type: "image" },
+          { name: "image_url", label: "Imagem", type: "image" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
       />
@@ -137,7 +136,7 @@ function AdminContent() {
         title="Galeria"
         fields={[
           { name: "title", label: "Legenda" },
-          { name: "image_url", label: "Imagem (link do Google Drive)", type: "image" },
+          { name: "image_url", label: "Imagem", type: "image" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
       />
@@ -173,7 +172,7 @@ function AdminContent() {
           { name: "name", label: "Nome" },
           { name: "role", label: "Função" },
           { name: "bio", label: "Sobre", type: "textarea" },
-          { name: "image_url", label: "Foto (link do Google Drive)", type: "image" },
+          { name: "image_url", label: "Foto", type: "image" },
           { name: "sort_order", label: "Ordem", type: "number" },
         ]}
       />
@@ -193,79 +192,6 @@ const CONTENT_LABELS: Record<string, string> = {
 
 function contentLabel(key: string) {
   return CONTENT_LABELS[key] ?? key;
-}
-
-const ORDER_STATUSES = ["pendente", "pago", "entregue", "cancelado"];
-
-function OrdersPanel() {
-  const queryClient = useQueryClient();
-  const { data: orders = [] } = useQuery(ordersQuery);
-
-  async function updateStatus(id: string, status: string) {
-    await supabase.from("shirt_orders").update({ status }).eq("id", id);
-    queryClient.invalidateQueries({ queryKey: ["shirt_orders"] });
-  }
-
-  async function remove(id: string) {
-    if (!window.confirm("Excluir este pedido?")) return;
-    await supabase.from("shirt_orders").delete().eq("id", id);
-    queryClient.invalidateQueries({ queryKey: ["shirt_orders"] });
-  }
-
-  const list = orders as Array<Record<string, unknown> & { id: string }>;
-
-  return (
-    <section className="rounded-2xl border border-border bg-card p-6">
-      <h2 className="text-xl">Pedidos de camiseta</h2>
-      <p className="mt-1 text-sm text-muted-foreground">
-        {list.length} {list.length === 1 ? "pedido" : "pedidos"} recebidos.
-      </p>
-
-      <ul className="mt-5 divide-y divide-border">
-        {list.map((order) => (
-          <li key={order.id} className="flex flex-wrap items-start justify-between gap-4 py-3">
-            <dl className="grid min-w-0 flex-1 gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
-              {Object.entries(order)
-                .filter(([key]) => key !== "id" && key !== "status")
-                .map(([key, value]) => (
-                  <div key={key} className="min-w-0">
-                    <dt className="text-xs uppercase text-muted-foreground">{key}</dt>
-                    <dd className="truncate">{String(value ?? "")}</dd>
-                  </div>
-                ))}
-            </dl>
-            <div className="flex shrink-0 items-center gap-3 text-sm">
-              <select
-                value={String(order.status ?? "")}
-                onChange={(e) => updateStatus(order.id, e.target.value)}
-                className="rounded-lg border border-border bg-background px-3 py-2"
-                aria-label="Status do pedido"
-              >
-                {!ORDER_STATUSES.includes(String(order.status ?? "")) ? (
-                  <option value={String(order.status ?? "")}>{String(order.status ?? "")}</option>
-                ) : null}
-                {ORDER_STATUSES.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-              <button
-                type="button"
-                onClick={() => remove(order.id)}
-                className="text-destructive underline"
-              >
-                Excluir
-              </button>
-            </div>
-          </li>
-        ))}
-        {list.length === 0 ? (
-          <li className="py-3 text-sm text-muted-foreground">Nenhum pedido ainda.</li>
-        ) : null}
-      </ul>
-    </section>
-  );
 }
 
 function SiteContentPanel() {
