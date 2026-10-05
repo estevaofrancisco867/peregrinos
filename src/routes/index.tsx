@@ -37,18 +37,23 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-// Função para garantir que qualquer link do Google Drive vire um link direto de imagem compatível
+// Função de segurança para garantir a exibição da imagem em qualquer cenário
 function resolveImageUrl(url: string): string {
   if (!url) return "";
-  if (url.includes("lh3.googleusercontent.com")) return url;
+  if (url.includes("lh3.googleusercontent.com") || url.includes("images.unsplash.com")) {
+    return url;
+  }
 
-  // Extrai o ID de links do Google Drive (/file/d/ID ou id=ID)
-  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  const match = 
+    url.match(/\/d\/([a-zA-Z0-9_-]+)/) || 
+    url.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
+    url.match(/\/uc\?(?:.*&)?id=([a-zA-Z0-9_-]+)/);
+
   if (match && match[1]) {
     return `https://lh3.googleusercontent.com/d/${match[1]}`;
   }
 
-  return url; // Retorna normal se for Unsplash ou outra URL externa
+  return url;
 }
 
 function Home() {
