@@ -83,12 +83,18 @@ function Home() {
               className="card-lift hover:card-lift-hover flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
             >
               {item.image_url ? (
-                <div className="w-full bg-secondary/10 flex items-center justify-center overflow-hidden">
+                <div className="relative h-48 w-full overflow-hidden bg-black/10 flex items-center justify-center">
+                  {/* Fundo desfocado para preencher o card original sem cortar a foto */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center filter blur-md opacity-50 scale-110"
+                    style={{ backgroundImage: `url(${String(item.image_url)})` }}
+                  />
+                  {/* Imagem principal inteira adaptada ao card original */}
                   <img
                     src={String(item.image_url)}
                     alt={item.title}
                     loading="lazy"
-                    className="w-full h-auto object-contain max-h-[320px]"
+                    className="relative z-10 h-full w-full object-contain drop-shadow-md"
                   />
                 </div>
               ) : null}
@@ -120,12 +126,16 @@ function Home() {
           {experiences.map((item) => (
             <article key={item.id} className="card-lift overflow-hidden rounded-2xl border border-border bg-card flex flex-col">
               {item.image_url ? (
-                <div className="w-full bg-secondary/10 flex items-center justify-center overflow-hidden">
+                <div className="relative h-64 w-full overflow-hidden bg-black/10 flex items-center justify-center">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center filter blur-md opacity-50 scale-110"
+                    style={{ backgroundImage: `url(${String(item.image_url)})` }}
+                  />
                   <img
                     src={String(item.image_url)}
                     alt={item.title}
                     loading="lazy"
-                    className="w-full h-auto object-contain max-h-[360px]"
+                    className="relative z-10 h-full w-full object-contain drop-shadow-md"
                   />
                 </div>
               ) : null}
@@ -147,12 +157,16 @@ function Home() {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {gallery.map((item) => (
             item.image_url ? (
-              <div key={item.id} className="overflow-hidden rounded-2xl bg-secondary/10 card-lift flex items-center justify-center">
+              <div key={item.id} className="relative h-56 w-full overflow-hidden rounded-2xl bg-black/15 card-lift flex items-center justify-center">
+                <div
+                  className="absolute inset-0 bg-cover bg-center filter blur-md opacity-50 scale-110"
+                  style={{ backgroundImage: `url(${String(item.image_url)})` }}
+                />
                 <img
                   src={String(item.image_url)}
                   alt={item.title || "Foto da peregrinação"}
                   loading="lazy"
-                  className="w-full h-auto object-contain max-h-[300px]"
+                  className="relative z-10 h-full w-full object-contain drop-shadow-md"
                 />
               </div>
             ) : null
@@ -215,12 +229,16 @@ function Home() {
               className="card-lift overflow-hidden rounded-2xl border border-border bg-card text-center flex flex-col"
             >
               {item.image_url ? (
-                <div className="w-full bg-secondary/10 flex items-center justify-center overflow-hidden">
+                <div className="relative h-56 w-full overflow-hidden bg-black/10 flex items-center justify-center">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center filter blur-md opacity-50 scale-110"
+                    style={{ backgroundImage: `url(${String(item.image_url)})` }}
+                  />
                   <img
                     src={String(item.image_url)}
                     alt={item.name}
                     loading="lazy"
-                    className="w-full h-auto object-contain max-h-[280px]"
+                    className="relative z-10 h-full w-full object-contain drop-shadow-md"
                   />
                 </div>
               ) : null}
