@@ -84,12 +84,14 @@ function Home() {
               className="card-lift hover:card-lift-hover flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
             >
               {item.image_url ? (
-                <img
-                  src={String(item.image_url)}
-                  alt={item.title}
-                  loading="lazy"
-                  className="h-44 w-full object-cover"
-                />
+                <div className="relative h-48 w-full overflow-hidden bg-muted">
+                  <img
+                    src={String(item.image_url)}
+                    alt={item.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
               ) : null}
               <div className="flex flex-1 flex-col p-5">
                 <time className="text-xs uppercase tracking-widest text-muted-foreground">
@@ -117,18 +119,22 @@ function Home() {
       >
         <div className="grid gap-8 md:grid-cols-3">
           {experiences.map((item) => (
-            <article key={item.id} className="card-lift overflow-hidden rounded-2xl border border-border bg-card">
+            <article key={item.id} className="card-lift overflow-hidden rounded-2xl border border-border bg-card flex flex-col">
               {item.image_url ? (
-                <img
-                  src={String(item.image_url)}
-                  alt={item.title}
-                  loading="lazy"
-                  className="h-72 w-full object-cover"
-                />
+                <div className="relative h-64 w-full overflow-hidden bg-muted">
+                  <img
+                    src={String(item.image_url)}
+                    alt={item.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
               ) : null}
-              <div className="p-6">
-                <h3 className="text-xl">{item.title}</h3>
-                <p className="mt-3 text-sm text-muted-foreground">{item.description}</p>
+              <div className="p-6 flex flex-1 flex-col justify-between">
+                <div>
+                  <h3 className="text-xl">{item.title}</h3>
+                  <p className="mt-3 text-sm text-muted-foreground">{item.description}</p>
+                </div>
               </div>
             </article>
           ))}
@@ -144,13 +150,14 @@ function Home() {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {gallery.map((item) => (
             item.image_url ? (
-              <img
-                key={item.id}
-                src={String(item.image_url)}
-                alt={item.title || "Foto da peregrinação"}
-                loading="lazy"
-                className="h-56 w-full rounded-2xl object-cover"
-              />
+              <div key={item.id} className="relative h-56 w-full overflow-hidden rounded-2xl bg-muted card-lift">
+                <img
+                  src={String(item.image_url)}
+                  alt={item.title || "Foto da peregrinação"}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                />
+              </div>
             ) : null
           ))}
         </div>
@@ -208,20 +215,24 @@ function Home() {
           {leaders.map((item) => (
             <article
               key={item.id}
-              className="card-lift overflow-hidden rounded-2xl border border-border bg-card text-center"
+              className="card-lift overflow-hidden rounded-2xl border border-border bg-card text-center flex flex-col"
             >
               {item.image_url ? (
-                <img
-                  src={String(item.image_url)}
-                  alt={item.name}
-                  loading="lazy"
-                  className="h-56 w-full object-cover"
-                />
+                <div className="relative h-56 w-full overflow-hidden bg-muted">
+                  <img
+                    src={String(item.image_url)}
+                    alt={item.name}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
               ) : null}
-              <div className="p-5">
-                <h3 className="text-lg">{item.name}</h3>
-                <p className="text-xs uppercase tracking-widest text-gold">{item.role}</p>
-                <p className="mt-3 text-sm text-muted-foreground">{item.bio}</p>
+              <div className="p-5 flex flex-1 flex-col justify-between">
+                <div>
+                  <h3 className="text-lg font-medium">{item.name}</h3>
+                  <p className="text-xs uppercase tracking-widest text-gold mt-1">{item.role}</p>
+                  <p className="mt-3 text-sm text-muted-foreground">{item.bio}</p>
+                </div>
               </div>
             </article>
           ))}
