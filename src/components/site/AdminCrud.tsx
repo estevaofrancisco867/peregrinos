@@ -13,23 +13,23 @@ export type Field = {
 
 type Row = Record<string, unknown> & { id: string };
 
-// Função infalível para converter qualquer formato de link do Google Drive para link direto de imagem
+// Função blindada para converter qualquer formato de link do Google Drive para link direto de imagem
 function formatGoogleDriveUrl(url: string): string {
-  if (!url) return url;
+  if (!url) return "";
   
-  // Se já for o link direto otimizado, retorna ele mesmo
-  if (url.includes("lh3.googleusercontent.com")) return url;
+  // Se for imagem externa normal (como Unsplash), retorna direto
+  if (url.includes("images.unsplash.com")) return url;
 
-  // Extrai o ID do arquivo de qualquer padrão do Google Drive (/file/d/ID, ?id=ID, /uc?id=ID)
+  // Extrai o ID do arquivo de QUALQUER formato de link do Google Drive
+  // (seja /file/d/.../view, ?id=..., ou /uc?export=view&id=...)
   const match = 
     url.match(/\/d\/([a-zA-Z0-9_-]+)/) || 
     url.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
     url.match(/\/uc\?(?:.*&)?id=([a-zA-Z0-9_-]+)/);
 
   if (match && match[1]) {
-    const fileId = match[1];
-    // Formato de exibição direta altamente estável para tags <img>
-    return `https://lh3.googleusercontent.com/d/${fileId}`;
+    // Formato de conteúdo direto oficial do Google que nunca falha em tags <img>
+    return `https://lh3.googleusercontent.com/d/${match[1]}`;
   }
 
   return url;
