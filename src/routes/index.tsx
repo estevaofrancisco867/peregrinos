@@ -83,19 +83,12 @@ function Home() {
               className="card-lift hover:card-lift-hover flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
             >
               {item.image_url ? (
-                /* Enquadramento específico para Notícias (Horizontal e destacado) */
-                <div className="relative h-52 w-full overflow-hidden bg-black/20 flex items-center justify-center">
-                  <img
-                    src={String(item.image_url)}
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 h-full w-full object-cover filter blur-lg brightness-75 scale-110"
-                  />
+                <div className="w-full bg-secondary/10 flex items-center justify-center overflow-hidden">
                   <img
                     src={String(item.image_url)}
                     alt={item.title}
                     loading="lazy"
-                    className="relative z-10 h-full w-full object-contain p-1.5 drop-shadow-lg"
+                    className="w-full h-auto object-contain max-h-[320px]"
                   />
                 </div>
               ) : null}
@@ -127,19 +120,12 @@ function Home() {
           {experiences.map((item) => (
             <article key={item.id} className="card-lift overflow-hidden rounded-2xl border border-border bg-card flex flex-col">
               {item.image_url ? (
-                /* Enquadramento específico para Experiências (Mais vertical e imersivo) */
-                <div className="relative h-72 w-full overflow-hidden bg-black/20 flex items-center justify-center">
-                  <img
-                    src={String(item.image_url)}
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 h-full w-full object-cover filter blur-lg brightness-75 scale-110"
-                  />
+                <div className="w-full bg-secondary/10 flex items-center justify-center overflow-hidden">
                   <img
                     src={String(item.image_url)}
                     alt={item.title}
                     loading="lazy"
-                    className="relative z-10 h-full w-full object-contain p-2 drop-shadow-lg"
+                    className="w-full h-auto object-contain max-h-[360px]"
                   />
                 </div>
               ) : null}
@@ -161,19 +147,12 @@ function Home() {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {gallery.map((item) => (
             item.image_url ? (
-              /* Enquadramento específico para a Galeria (Formato quadrado/amplo e uniforme) */
-              <div key={item.id} className="relative h-64 w-full overflow-hidden rounded-2xl bg-black/20 card-lift flex items-center justify-center">
-                <img
-                  src={String(item.image_url)}
-                  alt=""
-                  aria-hidden="true"
-                  className="absolute inset-0 h-full w-full object-cover filter blur-lg brightness-75 scale-110"
-                />
+              <div key={item.id} className="overflow-hidden rounded-2xl bg-secondary/10 card-lift flex items-center justify-center">
                 <img
                   src={String(item.image_url)}
                   alt={item.title || "Foto da peregrinação"}
                   loading="lazy"
-                  className="relative z-10 h-full w-full object-contain p-1.5 drop-shadow-lg"
+                  className="w-full h-auto object-contain max-h-[300px]"
                 />
               </div>
             ) : null
@@ -236,19 +215,12 @@ function Home() {
               className="card-lift overflow-hidden rounded-2xl border border-border bg-card text-center flex flex-col"
             >
               {item.image_url ? (
-                /* Enquadramento específico para Equipe/Líderes (Perfil focado e centralizado) */
-                <div className="relative h-60 w-full overflow-hidden bg-black/20 flex items-center justify-center">
-                  <img
-                    src={String(item.image_url)}
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 h-full w-full object-cover filter blur-lg brightness-75 scale-110"
-                  />
+                <div className="w-full bg-secondary/10 flex items-center justify-center overflow-hidden">
                   <img
                     src={String(item.image_url)}
                     alt={item.name}
                     loading="lazy"
-                    className="relative z-10 h-full w-full object-contain p-2 drop-shadow-lg"
+                    className="w-full h-auto object-contain max-h-[280px]"
                   />
                 </div>
               ) : null}
