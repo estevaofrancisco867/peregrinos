@@ -62,7 +62,6 @@ export function AdminCrud({
     setError(null);
 
     try {
-      // Converte o arquivo selecionado em Base64 para visualização e salvamento direto
       const reader = new FileReader();
       reader.onloadend = () => {
         setDraft((prev) => ({ ...prev, [fieldName]: reader.result as string }));
@@ -137,10 +136,7 @@ export function AdminCrud({
         {fields.map((field) => (
           <div key={field.name} className={field.type === "textarea" ? "md:col-span-2" : ""}>
             <label className="text-sm font-medium" htmlFor={`${table}-${field.name}`}>
-              {field.label}{" "}
-              {field.type === "image" ? (
-                <span className="text-xs text-muted-foreground">(Selecione do computador ou celular)</span>
-              ) : null}
+              {field.label}
             </label>
 
             {field.type === "textarea" ? (
