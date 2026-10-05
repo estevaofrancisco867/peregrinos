@@ -62,7 +62,8 @@ function Home() {
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* QUEM SOMOS */}
+      {/* ==================== QUEM SOMOS ==================== */}
+
       <Section
         id="quem-somos"
         eyebrow="Nossa missão"
@@ -92,7 +93,8 @@ function Home() {
         </div>
       </Section>
 
-      {/* NOTÍCIAS */}
+      {/* ==================== NOTÍCIAS ==================== */}
+
       <Section
         id="noticias"
         eyebrow="Acontece no caminho"
@@ -107,12 +109,12 @@ function Home() {
               className="card-lift hover:card-lift-hover flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
             >
               {item.image_url ? (
-                <div className="relative h-52 w-full overflow-hidden bg-black/20">
+                <div className="relative h-52 w-full overflow-hidden bg-muted flex items-center justify-center">
                   <img
                     src={String(item.image_url)}
                     alt={item.title}
                     loading="lazy"
-                    className="h-full w-full object-cover object-center"
+                    className="h-full w-full object-contain"
                   />
                 </div>
               ) : null}
@@ -143,7 +145,8 @@ function Home() {
         </div>
       </Section>
 
-      {/* EXPERIÊNCIAS */}
+      {/* ==================== EXPERIÊNCIAS ==================== */}
+
       <Section
         id="experiencias"
         eyebrow="Vivências"
@@ -156,12 +159,12 @@ function Home() {
               className="card-lift overflow-hidden rounded-2xl border border-border bg-card flex flex-col"
             >
               {item.image_url ? (
-                <div className="relative h-64 w-full overflow-hidden bg-black/20">
+                <div className="relative h-64 w-full overflow-hidden bg-muted flex items-center justify-center">
                   <img
                     src={String(item.image_url)}
                     alt={item.title}
                     loading="lazy"
-                    className="h-full w-full object-cover object-center"
+                    className="h-full w-full object-contain"
                   />
                 </div>
               ) : null}
@@ -188,7 +191,8 @@ function Home() {
         </div>
       </Section>
 
-      {/* GALERIA */}
+      {/* ==================== GALERIA ==================== */}
+
       <Section
         id="galeria"
         eyebrow="Memórias"
@@ -199,13 +203,13 @@ function Home() {
             item.image_url ? (
               <div
                 key={item.id}
-                className="relative h-56 w-full overflow-hidden rounded-2xl bg-black/20 card-lift"
+                className="relative h-56 w-full overflow-hidden rounded-2xl bg-muted card-lift flex items-center justify-center"
               >
                 <img
                   src={String(item.image_url)}
                   alt={item.title || "Foto da peregrinação"}
                   loading="lazy"
-                  className="h-full w-full object-cover object-center"
+                  className="h-full w-full object-contain"
                 />
               </div>
             ) : null
@@ -219,7 +223,8 @@ function Home() {
         </div>
       </Section>
 
-      {/* RELATOS */}
+      {/* ==================== RELATOS ==================== */}
+
       <Section
         id="relatos"
         eyebrow="Testemunhos"
@@ -250,7 +255,8 @@ function Home() {
         </div>
       </Section>
 
-      {/* VERSÍCULOS */}
+      {/* ==================== VERSÍCULOS ==================== */}
+
       <Section
         id="versiculos"
         eyebrow="Palavra de Deus"
@@ -275,7 +281,8 @@ function Home() {
         </div>
       </Section>
 
-      {/* COORDENAÇÃO */}
+      {/* ==================== COORDENAÇÃO ==================== */}
+
       <Section
         id="coordenacao"
         eyebrow="Nossa equipe"
@@ -288,12 +295,12 @@ function Home() {
               className="card-lift overflow-hidden rounded-2xl border border-border bg-card text-center flex flex-col"
             >
               {item.image_url ? (
-                <div className="relative h-56 w-full overflow-hidden bg-black/20">
+                <div className="relative h-56 w-full overflow-hidden bg-muted flex items-center justify-center">
                   <img
                     src={String(item.image_url)}
                     alt={item.name}
                     loading="lazy"
-                    className="h-full w-full object-cover object-center"
+                    className="h-full w-full object-contain"
                   />
                 </div>
               ) : null}
@@ -318,7 +325,8 @@ function Home() {
         </div>
       </Section>
 
-      {/* INSCRIÇÃO */}
+      {/* ==================== INSCRIÇÃO ==================== */}
+
       <Section
         id="inscricao"
         eyebrow="Participe"
