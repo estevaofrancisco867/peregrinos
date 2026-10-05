@@ -20,26 +20,21 @@ function formatGoogleDriveUrl(url: string): string {
 
   let fileId = "";
 
-  // 1. Tenta extrair de links do tipo /file/d/ID/view
-  const matchD = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (matchD && matchD[1]) {
-    fileId = matchD[1];
-  } else {
-    // 2. Tenta extrair de links com ?id=ID ou &id=ID (incluindo o seu formato uc?export=view&id=...)
-    const urlParams = new URLSearchParams(url.includes("?") ? url.split("?")[1] : "");
-    fileId = urlParams.get("id") || "";
-
-    // Fallback caso venha em outro padrão com id=
-    if (!fileId) {
-      const matchId = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (matchId && matchId[1]) {
-        fileId = matchId[1];
-      }
+  // 1. Se o link veio no formato uc?export=view&id=... ou qualquer outro com ?id= ou &id=
+  const urlParamsMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (urlParamsMatch && urlParamsMatch[1]) {
+    fileId = urlParamsMatch[1];
+  } 
+  // 2. Se o link veio no formato padrão /file/d/ID/view
+  else {
+    const matchD = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (matchD && matchD[1]) {
+      fileId = matchD[1];
     }
   }
 
+  // Se encontrou o ID, retorna o link de visualização direta oficial que nunca falha
   if (fileId) {
-    // Retorna o link direto oficial do Google Content (nunca falha em <img>)
     return `https://lh3.googleusercontent.com/d/${fileId}`;
   }
 
