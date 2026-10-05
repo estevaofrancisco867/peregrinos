@@ -42,13 +42,29 @@ function formatGoogleDriveUrl(url: string): string {
   if (!url) return "";
   if (url.includes("images.unsplash.com")) return url;
 
-  const match = 
-    url.match(/\/d\/([a-zA-Z0-9_-]+)/) || 
-    url.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
-    url.match(/\/uc\?(?:.*&)?id=([a-zA-Z0-9_-]+)/);
+  let fileId = "";
 
-  if (match && match[1]) {
-    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+  // 1. Tenta extrair de links do tipo /file/d/ID/view
+  const matchD = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (matchD && matchD[1]) {
+    fileId = matchD[1];
+  } else {
+    // 2. Tenta extrair de links com ?id=ID ou &id=ID (incluindo o seu formato uc?export=view&id=...)
+    const urlParams = new URLSearchParams(url.includes("?") ? url.split("?")[1] : "");
+    fileId = urlParams.get("id") || "";
+
+    // Fallback caso venha em outro padrão com id=
+    if (!fileId) {
+      const matchId = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (matchId && matchId[1]) {
+        fileId = matchId[1];
+      }
+    }
+  }
+
+  if (fileId) {
+    // Retorna o link direto oficial do Google Content (nunca falha em <img>)
+    return `https://lh3.googleusercontent.com/d/${fileId}`;
   }
 
   return url;
