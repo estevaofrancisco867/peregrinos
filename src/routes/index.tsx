@@ -37,12 +37,10 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-// Função de segurança para garantir a exibição da imagem em qualquer cenário
-function resolveImageUrl(url: string): string {
+// Função de formatação universal aplicada na exibição para garantir que nenhuma imagem quebre
+function formatGoogleDriveUrl(url: string): string {
   if (!url) return "";
-  if (url.includes("lh3.googleusercontent.com") || url.includes("images.unsplash.com")) {
-    return url;
-  }
+  if (url.includes("images.unsplash.com")) return url;
 
   const match = 
     url.match(/\/d\/([a-zA-Z0-9_-]+)/) || 
@@ -103,7 +101,7 @@ function Home() {
               className="card-lift hover:card-lift-hover flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
             >
               <img
-                src={resolveImageUrl(item.image_url)}
+                src={formatGoogleDriveUrl(item.image_url)}
                 alt={item.title}
                 loading="lazy"
                 className="h-44 w-full object-cover"
@@ -136,7 +134,7 @@ function Home() {
           {experiences.map((item) => (
             <article key={item.id} className="card-lift overflow-hidden rounded-2xl border border-border bg-card">
               <img
-                src={resolveImageUrl(item.image_url)}
+                src={formatGoogleDriveUrl(item.image_url)}
                 alt={item.title}
                 loading="lazy"
                 className="h-72 w-full object-cover"
@@ -160,7 +158,7 @@ function Home() {
           {gallery.map((item) => (
             <img
               key={item.id}
-              src={resolveImageUrl(item.image_url)}
+              src={formatGoogleDriveUrl(item.image_url)}
               alt={item.title || "Foto da peregrinação"}
               loading="lazy"
               className="h-56 w-full rounded-2xl object-cover"
@@ -224,7 +222,7 @@ function Home() {
               className="card-lift overflow-hidden rounded-2xl border border-border bg-card text-center"
             >
               <img
-                src={resolveImageUrl(item.image_url)}
+                src={formatGoogleDriveUrl(item.image_url)}
                 alt={item.name}
                 loading="lazy"
                 className="h-56 w-full object-cover"
