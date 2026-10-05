@@ -37,33 +37,6 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-// Função de formatação universal aplicada na exibição para garantir que nenhuma imagem quebre
-function formatGoogleDriveUrl(url: string): string {
-  if (!url) return "";
-  if (url.includes("images.unsplash.com")) return url;
-
-  let fileId = "";
-
-  // 1. Se o link veio no formato uc?export=view&id=... ou qualquer outro com ?id= ou &id=
-  const urlParamsMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  if (urlParamsMatch && urlParamsMatch[1]) {
-    fileId = urlParamsMatch[1];
-  } 
-  // 2. Se o link veio no formato padrão /file/d/ID/view
-  else {
-    const matchD = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    if (matchD && matchD[1]) {
-      fileId = matchD[1];
-    }
-  }
-
-  // Se encontrou o ID, retorna o link de visualização direta oficial que nunca falha
-  if (fileId) {
-    return `https://lh3.googleusercontent.com/d/${fileId}`;
-  }
-
-  return url;
-}
 function Home() {
   const content = useQuery(siteContentQuery).data ?? {};
   const news = useQuery(newsQuery).data ?? [];
@@ -110,12 +83,14 @@ function Home() {
               key={item.id}
               className="card-lift hover:card-lift-hover flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
             >
-              <img
-                src={formatGoogleDriveUrl(item.image_url)}
-                alt={item.title}
-                loading="lazy"
-                className="h-44 w-full object-cover"
-              />
+              {item.image_url ? (
+                <img
+                  src={String(item.image_url)}
+                  alt={item.title}
+                  loading="lazy"
+                  className="h-44 w-full object-cover"
+                />
+              ) : null}
               <div className="flex flex-1 flex-col p-5">
                 <time className="text-xs uppercase tracking-widest text-muted-foreground">
                   {formatDate(item.published_at)}
@@ -143,12 +118,14 @@ function Home() {
         <div className="grid gap-8 md:grid-cols-3">
           {experiences.map((item) => (
             <article key={item.id} className="card-lift overflow-hidden rounded-2xl border border-border bg-card">
-              <img
-                src={formatGoogleDriveUrl(item.image_url)}
-                alt={item.title}
-                loading="lazy"
-                className="h-72 w-full object-cover"
-              />
+              {item.image_url ? (
+                <img
+                  src={String(item.image_url)}
+                  alt={item.title}
+                  loading="lazy"
+                  className="h-72 w-full object-cover"
+                />
+              ) : null}
               <div className="p-6">
                 <h3 className="text-xl">{item.title}</h3>
                 <p className="mt-3 text-sm text-muted-foreground">{item.description}</p>
@@ -166,13 +143,15 @@ function Home() {
       <Section id="galeria" eyebrow="Memórias" title="Galeria de fotos">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {gallery.map((item) => (
-            <img
-              key={item.id}
-              src={formatGoogleDriveUrl(item.image_url)}
-              alt={item.title || "Foto da peregrinação"}
-              loading="lazy"
-              className="h-56 w-full rounded-2xl object-cover"
-            />
+            item.image_url ? (
+              <img
+                key={item.id}
+                src={String(item.image_url)}
+                alt={item.title || "Foto da peregrinação"}
+                loading="lazy"
+                className="h-56 w-full rounded-2xl object-cover"
+              />
+            ) : null
           ))}
         </div>
         <div className="mt-10">
@@ -231,12 +210,14 @@ function Home() {
               key={item.id}
               className="card-lift overflow-hidden rounded-2xl border border-border bg-card text-center"
             >
-              <img
-                src={formatGoogleDriveUrl(item.image_url)}
-                alt={item.name}
-                loading="lazy"
-                className="h-56 w-full object-cover"
-              />
+              {item.image_url ? (
+                <img
+                  src={String(item.image_url)}
+                  alt={item.name}
+                  loading="lazy"
+                  className="h-56 w-full object-cover"
+                />
+              ) : null}
               <div className="p-5">
                 <h3 className="text-lg">{item.name}</h3>
                 <p className="text-xs uppercase tracking-widest text-gold">{item.role}</p>
