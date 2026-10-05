@@ -13,19 +13,25 @@ export type Field = {
 
 type Row = Record<string, unknown> & { id: string };
 
-// Função auxiliar para converter links do Google Drive em links diretos
+// Função infalível para converter qualquer formato de link do Google Drive para link direto de imagem
 function formatGoogleDriveUrl(url: string): string {
   if (!url) return url;
   
-  // Suporta formatos como: https://drive.google.com/file/d/1NLbCNx8o6HOtJtV5TrZH4q6I-di5u2DE/view
-  const fileIdMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-  
-  if (fileIdMatch && fileIdMatch[1]) {
-    const fileId = fileIdMatch[1];
-    // Retorna o link de visualização direta otimizado para imagens/arquivos
-    return `https://drive.google.com/uc?export=view&id=${fileId}`;
+  // Se já for o link direto otimizado, retorna ele mesmo
+  if (url.includes("lh3.googleusercontent.com")) return url;
+
+  // Extrai o ID do arquivo de qualquer padrão do Google Drive (/file/d/ID, ?id=ID, /uc?id=ID)
+  const match = 
+    url.match(/\/d\/([a-zA-Z0-9_-]+)/) || 
+    url.match(/[?&]id=([a-zA-Z0-9_-]+)/) ||
+    url.match(/\/uc\?(?:.*&)?id=([a-zA-Z0-9_-]+)/);
+
+  if (match && match[1]) {
+    const fileId = match[1];
+    // Formato de exibição direta altamente estável para tags <img>
+    return `https://lh3.googleusercontent.com/d/${fileId}`;
   }
-  
+
   return url;
 }
 
