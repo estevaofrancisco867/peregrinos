@@ -53,7 +53,7 @@ export function AdminCrud({
     queryClient.invalidateQueries({ queryKey: [queryKey] });
   }
 
-  // Função para lidar com o upload/conversão da imagem do computador/celular
+  // Função para ler a imagem direto do dispositivo (computador ou celular)
   async function handleFileChange(fieldName: string, e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -62,33 +62,13 @@ export function AdminCrud({
     setError(null);
 
     try {
-      // Opção 1: Se você tiver um Bucket no Supabase chamado "images", faça o upload direto:
-      /*
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from("images")
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: publicUrlData } = supabase.storage
-        .from("images")
-        .getPublicUrl(filePath);
-
-      setDraft((prev) => ({ ...prev, [fieldName]: publicUrlData.publicUrl }));
-      */
-
-      // Opção 2 (Mais simples e sem dor de cabeça com Buckets): Converte o arquivo local em Base64 / URL temporária
+      // Converte o arquivo selecionado em Base64 para visualização e salvamento direto
       const reader = new FileReader();
       reader.onloadend = () => {
         setDraft((prev) => ({ ...prev, [fieldName]: reader.result as string }));
         setBusy(false);
       };
       reader.readAsDataURL(file);
-
     } catch (err) {
       setError("Não foi possível carregar a imagem do dispositivo.");
       setBusy(false);
@@ -157,7 +137,10 @@ export function AdminCrud({
         {fields.map((field) => (
           <div key={field.name} className={field.type === "textarea" ? "md:col-span-2" : ""}>
             <label className="text-sm font-medium" htmlFor={`${table}-${field.name}`}>
-              {field.label} {field.type === "image" ? <span className="text-xs text-muted-foreground">(Selecione do computador/celular)</span> : null}
+              {field.label}{" "}
+              {field.type === "image" ? (
+                <span className="text-xs text-muted-foreground">(Selecione do computador ou celular)</span>
+              ) : null}
             </label>
 
             {field.type === "textarea" ? (
@@ -179,19 +162,27 @@ export function AdminCrud({
                 />
                 {draft[field.name] ? (
                   <div className="flex items-center gap-3">
-                    <img 
-                      src={draft[field.name]} 
-                      alt="Pré-visualização" 
-                      className="h-16 w-16 rounded-lg object-cover border border-border" 
+                    <img
+                      src={draft[field.name]}
+                      alt="Pré-visualização"
+                      className="h-16 w-16 rounded-lg object-cover border border-border"
                     />
-                    <span className="text-xs text-muted-foreground">Imagem selecionada com sucesso</span>
+                    <span className="text-xs text-muted-foreground">Imagem carregada com sucesso</span>
                   </div>
                 ) : null}
               </div>
             ) : (
               <input
                 id={`${table}-${field.name}`}
-                type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
+                type={
+                  field.type === "number"
+                    ? "number"
+                    : field.type === "date"
+                    ? "date"
+                    : field.type === "url"
+                    ? "url"
+                    : "text"
+                }
                 value={draft[field.name] ?? ""}
                 onChange={(e) => setDraft({ ...draft, [field.name]: e.target.value })}
                 className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2"
@@ -222,10 +213,10 @@ export function AdminCrud({
           <li key={row.id} className="flex items-start justify-between gap-4 py-3">
             <div className="min-w-0 flex items-center gap-3">
               {row.image_url ? (
-                <img 
-                  src={String(row.image_url)} 
-                  alt="" 
-                  className="h-10 w-10 shrink-0 rounded-md object-cover border border-border" 
+                <img
+                  src={String(row.image_url)}
+                  alt=""
+                  className="h-10 w-10 shrink-0 rounded-md object-cover border border-border"
                 />
               ) : null}
               <div className="min-w-0">
